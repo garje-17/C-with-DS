@@ -7,7 +7,6 @@
 	typedef struct Node
 	{
 
-		struct Node *prev;
 		int data;
 		struct Node *next;
 	} Node;
@@ -18,8 +17,6 @@
 	{
 
 		Node *newNode = (Node *)malloc(sizeof(Node));
-
-		newNode->prev = NULL;
 
 		printf("Enter data : ");
 		scanf("%d", &newNode->data);
@@ -35,18 +32,45 @@
 		Node *newNode = createNode();
 
 		if (head == NULL)
+		{
+
 			head = newNode;
+			newNode->next = head;
+		}
 		else
 		{
 
 			Node *temp = head;
 
-			while (temp->next != NULL)
+			while (temp->next != head)
 				temp = temp->next;
 
 			temp->next = newNode;
-			newNode->prev = temp;
+			newNode->next = head;
 		}
+	}
+
+	void printLL()
+	{
+
+		if (head == NULL)
+			printf("LinkedList is Empty.\n");
+		else
+		{
+
+			Node *temp = head;
+
+			while (temp->next != head)
+			{
+
+				printf("|%d|->", temp->data);
+				temp = temp->next;
+			}
+
+			printf("|%d|", temp->data);
+		}
+
+		printf("\n");
 	}
 
 	void addFirst()
@@ -55,13 +79,22 @@
 		Node *newNode = createNode();
 
 		if (head == NULL)
+		{
+
 			head = newNode;
+			newNode->next = head;
+		}
 		else
 		{
 
+			Node *temp = head;
+
+			while (temp->next != head)
+				temp = temp->next;
+
 			newNode->next = head;
-			head->prev = newNode;
 			head = newNode;
+			temp->next = head;
 		}
 	}
 
@@ -71,55 +104,48 @@
 		Node *newNode = createNode();
 
 		if (head == NULL)
+		{
+
 			head = newNode;
+			newNode->next = head;
+		}
 		else
 		{
 
 			Node *temp = head;
 
-			while (temp->next != NULL)
+			while (temp->next != head)
 				temp = temp->next;
 
 			temp->next = newNode;
-			newNode->prev = temp;
-		}
-	}
-
-	void printLL()
-	{
-
-		if (head == NULL)
-			printf("LinkedList is empty.\n");
-		else
-		{
-
-			Node *temp = head;
-
-			while (temp->next != NULL)
-			{
-
-				printf("|%d|->", temp->data);
-				temp = temp->next;
-			}
-			printf("|%d|", temp->data);
-			printf("\n");
+			newNode->next = head;
 		}
 	}
 
 	int countNode()
 	{
 
-		Node *temp = head;
 		int count = 0;
 
-		while (temp != NULL)
+		if (head == NULL)
+			return count;
+		else if (head->next == head)
+			return 1;
+		else
 		{
 
-			count++;
-			temp = temp->next;
+			printf("Here\n");
+			Node *temp = head;
+
+			while (temp->next != head)
+			{
+
+				count++;
+				temp = temp->next;
+			}
 		}
 
-		return count;
+		return count + 1;
 	}
 
 	void addAtPos(int pos)
@@ -150,8 +176,6 @@
 				}
 
 				newNode->next = temp->next;
-				newNode->prev = temp;
-				newNode->next->prev = newNode;
 				temp->next = newNode;
 			}
 		}
@@ -164,7 +188,7 @@
 			printf("LinkedList is empty.\n");
 		else
 		{
-			if (head->next == NULL)
+			if (head->next == head)
 			{
 
 				free(head);
@@ -173,9 +197,17 @@
 			else
 			{
 
+				Node *temp = head;
+
+				while (temp->next != head)
+					temp = temp->next;
+
+				Node *temp1 = head;
+
 				head = head->next;
-				free(head->prev);
-				head->prev = NULL;
+				temp->next = head;
+
+				free(temp1);
 			}
 		}
 	}
@@ -188,21 +220,23 @@
 		else
 		{
 
-			if (head->next == NULL)
+			if (head->next == head)
 				deleteFirst();
 			else
 			{
 
 				Node *temp = head;
 
-				while (temp->next->next != NULL)
+				while (temp->next->next != head)
 					temp = temp->next;
 
 				free(temp->next);
-				temp->next = NULL;
+				temp->next = head;
 			}
 		}
 	}
+
+	// Delete LL Code (Yet to add).
 
 	void deleteAtPos(int pos)
 	{
@@ -220,6 +254,7 @@
 				deleteLast();
 			else
 			{
+
 				Node *temp = head;
 
 				while (pos - 2)
@@ -229,26 +264,27 @@
 					pos--;
 				}
 
-				Node *ptr = temp->next;
+				Node *temp2 = temp->next;
+
 				temp->next = temp->next->next;
-				temp->next->prev = temp;
-				free(ptr);
+				free(temp2);
 			}
 		}
 	}
 
-	int updateNodeLL(int pos, int data)
+	int updateNode(int pos, int data)
 	{
 
 		int count = countNode();
 
 		if (pos <= 0 || pos > count)
 		{
-			printf("Invalid position\n");
+			printf("INVALID POSITION\n");
+			return -1;
 		}
 		else
 		{
-			Node *temp = head;
+			struct Node *temp = head;
 
 			while (pos - 1)
 			{
@@ -261,18 +297,8 @@
 		return 0;
 	}
 
-	void deleteLL()
-	{
-		while (head != NULL)
-		{
-			free(head->prev);
-			head = head->next;
-		}
-	}
-
 	void main()
 	{
-
 		int pos;
 		int data;
 		char choice;
@@ -322,7 +348,7 @@
 				deleteLast();
 				break;
 			case 8:
-				deleteLL();
+				//	deleteLL();
 				break;
 			case 9:
 				printf("Enter position : ");
@@ -334,7 +360,7 @@
 				scanf("%d", &pos);
 				printf("Enter data : ");
 				scanf("%d", &data);
-				updateNodeLL(pos, data);
+				updateNode(pos, data);
 				break;
 			case 11:
 				printf("Enter position : ");
@@ -351,6 +377,5 @@
 
 		} while (choice == 'y' || choice == 'Y');
 	}
-
 
 
