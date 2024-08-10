@@ -4,24 +4,24 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 
-	struct Node
+	typedef struct Node
 	{
 
 		struct Node *prev;
 		int data;
 		struct Node *next;
-	};
+	} Node;
 
-	struct Node *head = NULL;
+	Node *head = NULL;
 
-	struct Node *createNode()
+	Node *createNode()
 	{
 
-		struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+		Node *newNode = (Node *)malloc(sizeof(Node));
 
 		newNode->prev = NULL;
 
-		printf("Enter Data : ");
+		printf("Enter data : ");
 		scanf("%d", &newNode->data);
 
 		newNode->next = NULL;
@@ -29,122 +29,118 @@
 		return newNode;
 	}
 
-	int Count()
-	{
-		int count = 0;
-		if (head == NULL)
-		{
-			count = 0;
-		}
-		else
-		{
-
-			struct Node *temp = head;
-
-			while (temp->next != head)
-			{
-				count++;
-				temp = temp->next;
-			}
-		}
-		return count + 1;
-	}
-	void PrintNode()
-	{
-
-		if (head == NULL)
-		{
-			printf("LINKEDLIST IS EMPTY\n");
-		}
-		else
-		{
-
-			struct Node *temp = head;
-
-			while (temp->next != head)
-			{
-
-				if (temp->next != head)
-				{
-					printf("| %d |<->", temp->data);
-				}
-				temp = temp->next;
-			}
-			printf("| %d |", temp->data);
-		}
-	}
-
 	void addNode()
 	{
 
-		struct Node *newNode = createNode();
+		Node *newNode = createNode();
 
 		if (head == NULL)
-		{
 			head = newNode;
-			head->next = head;
-			head->prev = head;
-		}
 		else
 		{
 
-			head->prev->next = newNode;
-			newNode->prev = head->prev;
+			Node *temp = head;
 
-			newNode->next = head;
-			head->prev = newNode;
+			while (temp->next != NULL)
+				temp = temp->next;
+
+			temp->next = newNode;
+			newNode->prev = temp;
 		}
 	}
 
 	void addFirst()
 	{
 
-		struct Node *newNode = createNode();
+		Node *newNode = createNode();
 
 		if (head == NULL)
-		{
-
 			head = newNode;
-			head->next = head;
-			head->prev = head;
-		}
 		else
 		{
 
 			newNode->next = head;
-			head->prev->next = newNode;
-			newNode->prev = head->prev;
 			head->prev = newNode;
 			head = newNode;
 		}
 	}
 
-	int addAtPos(int pos)
+	void addLast()
 	{
 
-		int cnt = Count();
+		Node *newNode = createNode();
 
-		if (pos <= 0 || pos > cnt + 1)
-		{
-			printf("Invalid Position");
-			return -1;
-		}
+		if (head == NULL)
+			head = newNode;
 		else
 		{
-			if (pos == cnt + 1)
+
+			Node *temp = head;
+
+			while (temp->next != NULL)
+				temp = temp->next;
+
+			temp->next = newNode;
+			newNode->prev = temp;
+		}
+	}
+
+	void printLL()
+	{
+
+		if (head == NULL)
+			printf("LinkedList is empty.\n");
+		else
+		{
+
+			Node *temp = head;
+
+			while (temp->next != NULL)
 			{
 
-				addNode();
+				printf("|%d|->", temp->data);
+				temp = temp->next;
 			}
-			else if (pos == 1)
-			{
+			printf("|%d|", temp->data);
+			printf("\n");
+		}
+	}
 
+	int countNode()
+	{
+
+		Node *temp = head;
+		int count = 0;
+
+		while (temp != NULL)
+		{
+
+			count++;
+			temp = temp->next;
+		}
+
+		return count;
+	}
+
+	void addAtPos(int pos)
+	{
+
+		int count = countNode();
+
+		if (pos <= 0 || pos > count + 1)
+			printf("Invalid position.\n");
+		else
+		{
+
+			if (pos == 1)
 				addFirst();
-			}
+			else if (pos == count + 1)
+				addNode();
 			else
 			{
-				struct Node *newNode = createNode();
-				struct Node *temp = head;
+
+				Node *newNode = createNode();
+				Node *temp = head;
 
 				while (pos - 2)
 				{
@@ -152,52 +148,23 @@
 					temp = temp->next;
 					pos--;
 				}
+
 				newNode->next = temp->next;
 				newNode->prev = temp;
-
-				temp->next->prev = newNode;
+				newNode->next->prev = newNode;
 				temp->next = newNode;
 			}
-			return 0;
 		}
 	}
 
-	void delFirst()
+	void deleteFirst()
 	{
 
 		if (head == NULL)
-		{
-			printf("LinkedList is Empty\n");
-		}
-		else if (head->next == head)
-		{
-
-			free(head);
-			head = NULL;
-		}
-
+			printf("LinkedList is empty.\n");
 		else
 		{
-			head = head->next;
-			head->prev = head->prev->prev;
-
-			free(head->prev->next);
-
-			head->prev->next = head;
-		}
-	}
-
-	int delLast()
-	{
-
-		if (head == NULL)
-		{
-			printf("LinkedList is Empty\n");
-			return -1;
-		}
-		else
-		{
-			if (head->next == head)
+			if (head->next == NULL)
 			{
 
 				free(head);
@@ -205,37 +172,55 @@
 			}
 			else
 			{
-				head->prev = head->prev->prev;
-				free(head->prev->next);
-				head->prev->next = head;
+
+				head = head->next;
+				free(head->prev);
+				head->prev = NULL;
 			}
-			return 0;
 		}
 	}
 
-	void delAtPos(int pos)
+	void deleteLast()
 	{
 
-		int count = Count();
-
-		if (pos <= 0 || pos > count)
-		{
-			printf("Invalid Position\n");
-		}
+		if (head == NULL)
+			printf("LinkedList is empty.\n");
 		else
 		{
-			if (pos == 1)
-			{
-				delFirst();
-			}
-			else if (pos == count)
-			{
-				delLast();
-			}
+
+			if (head->next == NULL)
+				deleteFirst();
 			else
 			{
 
-				struct Node *temp = head;
+				Node *temp = head;
+
+				while (temp->next->next != NULL)
+					temp = temp->next;
+
+				free(temp->next);
+				temp->next = NULL;
+			}
+		}
+	}
+
+	void deleteAtPos(int pos)
+	{
+
+		int count = countNode();
+
+		if (pos <= 0 || pos > count)
+			printf("Invalid Position\n");
+		else
+		{
+
+			if (pos == 1)
+				deleteFirst();
+			else if (pos == count)
+				deleteLast();
+			else
+			{
+				Node *temp = head;
 
 				while (pos - 2)
 				{
@@ -244,24 +229,72 @@
 					pos--;
 				}
 
+				Node *ptr = temp->next;
 				temp->next = temp->next->next;
-				free(temp->next->prev);
 				temp->next->prev = temp;
+				free(ptr);
 			}
 		}
 	}
+
+	int updateNodeLL(int pos, int data)
+	{
+
+		int count = countNode();
+
+		if (pos <= 0 || pos > count)
+		{
+			printf("Invalid position\n");
+		}
+		else
+		{
+			Node *temp = head;
+
+			while (pos - 1)
+			{
+				temp = temp->next;
+				pos--;
+			}
+
+			temp->data = data;
+		}
+		return 0;
+	}
+
+	void deleteLL()
+	{
+		while (head != NULL)
+		{
+			free(head->prev);
+			head = head->next;
+		}
+	}
+
 	void main()
 	{
 
+		int pos;
+		int data;
 		char choice;
 
 		do
 		{
 
-			printf("1. addNode()\n 2.addFirst()\n 3.addAtPos \n 4.PrintNode\n 5.delFirst()\n 6.delLast()\n 7.delAtPos()\n 8.count()\n");
+			printf("1. ADD NODE\n");
+			printf("2. ADD FIRST\n");
+			printf("3. ADD LAST");
+			printf("4. PRINT LINKEDLIST\n");
+			printf("5. COUNT NODE\n");
+			printf("6. DELETE FIRST\n");
+			printf("7. DELETE LAST\n");
+			printf("8. DELETE LINKEDLIST\n");
+			printf("9. ADD AT POSITION\n");
+			printf("10. UPDATE NODE\n");
+			printf("11. DELETE AT POSITION\n");
 
 			int ch;
-			printf("Enter choice : ");
+
+			printf("Enter you choice : ");
 			scanf("%d", &ch);
 
 			switch (ch)
@@ -274,40 +307,46 @@
 				addFirst();
 				break;
 			case 3:
-			{
-
-				int pos;
-				printf("Enter position: \n");
-				scanf("%d", &pos);
-				addAtPos(pos);
-			}
-			break;
+				addLast();
+				break;
 			case 4:
-				PrintNode();
+				printLL();
 				break;
 			case 5:
-				delFirst();
+				printf("Node count = %d", countNode());
 				break;
 			case 6:
-				delLast();
+				deleteFirst();
 				break;
 			case 7:
-			{
-				int pos;
-				printf("Enter position: \n");
-				scanf("%d", &pos);
-				delAtPos(pos);
-			}
-			break;
+				deleteLast();
+				break;
 			case 8:
-				Count();
+				deleteLL();
+				break;
+			case 9:
+				printf("Enter position : ");
+				scanf("%d", &pos);
+				addAtPos(pos);
+				break;
+			case 10:
+				printf("Enter position : ");
+				scanf("%d", &pos);
+				printf("Enter data : ");
+				scanf("%d", &data);
+				updateNodeLL(pos, data);
+				break;
+			case 11:
+				printf("Enter position : ");
+				scanf("%d", &pos);
+				deleteAtPos(pos);
 				break;
 			default:
-				printf("wrong choice!!\n");
+				printf("Invalid choice.\n");
 			}
 
 			getchar();
-			printf("\nDo You Want To Continue :  y or n\n");
+			printf("Do you want to continue ?\n");
 			scanf("%c", &choice);
 
 		} while (choice == 'y' || choice == 'Y');

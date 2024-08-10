@@ -35,53 +35,40 @@
 		newnode->prev = temp;
 		}
 	}
-	int nthOccurrence(int num, int occ)
+	int occurenceCount(int num)
 	{
 
-		int index = 0;
-		int flag = 0;
-		int count = 0;
-
 		if (head == NULL)
+		{
+			// sprintf(singlyLLStr2, "LINKEDLIST IS EMPTY\n");
 			return -1;
+		}
 		else
 		{
+			int count = 0;
 			node *temp = head;
 
 			while (temp != NULL)
 			{
-				index++;
-
 				if (temp->data == num)
-				{
-
 					count++;
-					flag = 1;
-
-					if (count == occ)
-						return index;
-				}
 
 				temp = temp->next;
 			}
+			return count;
 		}
-
-		if (flag == 0)
-			return 0;
-		else
-			return -2;
 	}
 
 	void main(){
-		int x,y;
+		int x;
 		printf("How Many Nodes Do You Want?\n");
 		scanf("%d",&x);
 		for(int i=1;i<=x;i++){
 			addNode();
 		}
-		printf("Enter a number and occurrence\n");
-		scanf("%d%d",&x,&y);
-		printf("%d",nthOccurrence(x,y));
+		printf("Enter a number:\n");
+		scanf("%d",&x);
+		printf("%d",(occurenceCount(x)));
 	
 	}
 

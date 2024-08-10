@@ -35,53 +35,66 @@
 		newnode->prev = temp;
 		}
 	}
-	int nthOccurrence(int num, int occ)
+
+	int isPalindrome()
 	{
 
-		int index = 0;
-		int flag = 0;
-		int count = 0;
-
+		node *temp = head;
 		if (head == NULL)
 			return -1;
-		else
+		else if (temp->next == NULL)
 		{
-			node *temp = head;
+			return 1;
+		}
+		node *head1 = temp;
+		node *head2 = temp->next;
+		int count = 1;
 
-			while (temp != NULL)
-			{
-				index++;
+		while (head1->next != NULL)
+		{
+			head1 = head1->next;
+			count++;
+		}
+		head1 = temp;
+		temp->next = NULL;
 
-				if (temp->data == num)
-				{
-
-					count++;
-					flag = 1;
-
-					if (count == occ)
-						return index;
-				}
-
-				temp = temp->next;
-			}
+		for (int i = 1; i < count / 2; i++)
+		{
+			node *r = head2->next;
+			head2->next = head1;
+			head1 = head2;
+			head2 = r;
 		}
 
-		if (flag == 0)
-			return 0;
-		else
-			return -2;
-	}
+		if (count % 2 != 0)
+		{
+			head2 = head2->next;
+		}
 
+		while (head1 != NULL)
+		{
+			if (head1->data != head2->data)
+			{
+				return 0;
+			}
+			head1 = head1->next;
+			head2 = head2->next;
+		}
+		return 1;
+	}
 	void main(){
-		int x,y;
+		int x;
 		printf("How Many Nodes Do You Want?\n");
 		scanf("%d",&x);
 		for(int i=1;i<=x;i++){
 			addNode();
 		}
-		printf("Enter a number and occurrence\n");
-		scanf("%d%d",&x,&y);
-		printf("%d",nthOccurrence(x,y));
+		x = isPalindrome();
+		if(x ==1){
+			printf("Palindrome LL\n");
+		}else{
+			printf("Not a Palindrome LL\n");
+	}
 	
 	}
 
