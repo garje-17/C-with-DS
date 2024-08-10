@@ -1,7 +1,7 @@
 
 
 
-	//A Program adds of a data element from singly linear linked list.
+	//A Program adds the digits of a data element from singly linear linked list and changes the data.*/
 
 	#include<stdio.h>
 	#include<stdlib.h>
@@ -38,18 +38,18 @@
 
 	             head = newNode;
 
- 	      }else{
+	       }else{
 
-                 Node *temp = head;
+	              Node *temp = head;
 
-			    while(temp->next != NULL){
+			      while(temp->next != NULL){
 
-			      temp = temp->next;
+				      temp = temp->next;
+					  
+	     	       }
 
-		       }
-
-		        temp->next = newNode;
-		}
+	       		 temp->next = newNode;
+			}
 	}	
 
 	//printLL
@@ -59,9 +59,9 @@
 		if(head==NULL){
 
 			return -1;
-
-		}else{
 	
+		}else{
+			
 			Node *temp = head;
 
 			while(temp->next != NULL){
@@ -71,24 +71,36 @@
 			}
 
 			printf("|%d|\n",temp->data);
-			return 0;
 		}
+	}	
+
+	//SumOfDataDigit
+
+	int sumOfDigit(int num){
+
+	       int sum=0;
+
+	       while(num!=0){
+
+		       sum+=num%10;
+		       num/=10;
+  	        }
+
+       		return sum;
 	}
 
-	// sumOfData
 
-	int sumOfData(){
+	void sumOfData(){
 
 		Node *temp = head;
-		int sum=0;
 
 		while(temp != NULL){
 
-			sum+=temp->data;
+			temp->data = sumOfDigit(temp->data);
 			temp = temp->next;
 		}
 
-		return sum;
+		printLL();
 
 	}
 
@@ -96,29 +108,27 @@
 
 	void main(){
 
-	    int n;
-       
- 		printf("Enter No of Nodes:\n");
-        scanf("%d",&n);
-        
-       	if(n>0){
+ 	      int n;
 	
-	    	for(int i =0;i<n;i++){
+ 	      printf("Enter No of Nodes:\n");
+ 	      scanf("%d",&n);
+	
+ 	      if(n>0){
+	
+		    for(int i =0;i<n;i++){
 
 				addNode();
 			}
 
-	    	printLL();
+		    printLL();
 		
-	    	int ret = sumOfData();
-
-			printf("Sum Of Data:%d\n",ret);
+		    sumOfData();
 	   
-       }else{
-	
-		printf("Invalid Node Count!\n");
+  	     }else{
+		
+			printf("Invalid Node Count!\n");
 
-	   }
+		}
 	
 	}
 

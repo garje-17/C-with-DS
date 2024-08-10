@@ -1,9 +1,9 @@
 
 
 
-	/*This Program gives minimum data element from Linked List·*/
+	//This function gives total occurrence count of given number in LinkedList.
 
-	#include<stdio.h>
+    #include<stdio.h>
 	#include<stdlib.h>
 
 	typedef struct Node{
@@ -20,7 +20,7 @@
 
 		Node *newNode = (Node*)malloc(sizeof(Node));
 
-    	printf("Enter Data:\n");
+		printf("Enter Data:\n");
 		scanf("%d",&(newNode->data));
 
 		newNode->next = NULL;
@@ -32,13 +32,13 @@
 
 	void addNode(){
 
-       	Node *newNode = createNode();
+      	 Node *newNode = createNode();
 
-       	if(head==NULL){
+        if(head==NULL){
 
-            head = newNode;
+             head = newNode;
 
-    	 }else{
+       	}else{
 
             Node *temp = head;
 
@@ -46,13 +46,13 @@
 
 		      	temp = temp->next;
 
-	       	}
+	      	 }
 
 	        temp->next = newNode;
 		}
 	}
 
-	//printLL
+//printLL
 
 	int printLL(){
 
@@ -61,7 +61,7 @@
 			return -1;
 	
 		}else{
-		
+			
 			Node *temp = head;
 
 			while(temp->next != NULL){
@@ -72,32 +72,31 @@
 
 			printf("|%d|\n",temp->data);
 			return 0;
-		}
-	}
+	    }
+    }
 
-	// Minimum data 
+	//Occurrence Count
 
-	int min(){
+	int occurenceCount(int num){
 
-        int min= head->data;
-        
-		Node *temp=head;
-        
-		while(temp!= NULL){
-  	 
-	 		if(min > temp->data){
-                   
-				    min = temp->data;
-            }
-            
+		int count = 0;
+
+		Node *temp = head;
+
+		while(temp != NULL){
+
+			if(temp->data == num){
+
+				count++;
+			}
+	        
 			temp = temp->next;
+		}
 
-        }
-	
-		return min;
+		return count;
 	}
 
-	// Driver Code
+	//Driver Code
 
 	void main(){
 
@@ -113,16 +112,20 @@
 				addNode();
 			}
 
-	    	printLL();
+		    printLL();
 		
-	        int ret = min();
-               
-            printf("%d is minimum in LinkedList \n",ret);
-                  
-    	}else{
-		
+		    int num;
+				  
+	    	printf("Enter number to be Searched:\n");
+	    	scanf("%d",&num);
+
+            int ret = occurenceCount(num);
+ 
+            printf("Occurrence Count of %d : %d\n",num,ret);           
+       
+	   }else{
+			
 			printf("Invalid Node Count!\n");
-        
 		}
 	
 	}

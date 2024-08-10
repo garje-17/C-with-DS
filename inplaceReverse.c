@@ -1,9 +1,9 @@
 
 
 
-	//This Program gives maximum data element from Linked List.
+	//A Program that reverse singly linkedlist in inplace .
 
-    #include<stdio.h>
+	#include<stdio.h>
 	#include<stdlib.h>
 
 	typedef struct Node{
@@ -12,9 +12,9 @@
 		struct Node *next;
 	}Node;
 
-	Node *head = NULL;
+    Node *head = NULL;
 
-	//createNode
+		//createNode
 
 	Node* createNode(){
 
@@ -32,21 +32,21 @@
 
 	void addNode(){
 
-    	Node *newNode = createNode();
+       Node *newNode = createNode();
 
-       	if(head==NULL){
+       if(head==NULL){
 
-            head = newNode;
+             head = newNode;
 
-        }else{
+       }else{
 
-            Node *temp = head;
+              Node *temp = head;
 
-	      	while(temp->next != NULL){
+	      while(temp->next != NULL){
 
-		     	temp = temp->next;
+		      temp = temp->next;
 
-	       	}
+	       }
 
 	        temp->next = newNode;
 		}
@@ -61,7 +61,7 @@
 			return -1;
 		
 		}else{
-	
+		
 			Node *temp = head;
 
 			while(temp->next != NULL){
@@ -73,30 +73,30 @@
 			printf("|%d|\n",temp->data);
 			return 0;
 		}
-	}
+    }
 
-	//Maximum data 
+	//Inplace Reverse
 
-	int  max(){
-		
-		int max = head->data;
+	void inplaceReverse(){
 
-		Node *temp=head;
-	
-		while(temp!= NULL){
-            
-			if( max < temp->data)
-		    
-				max = temp->data;
-	    
-	    	temp = temp->next;
+		struct Node *temp1 =head;
+		struct Node *temp2 =NULL;
+		struct Node *temp3 =NULL;
 
+		while(temp1!=NULL){
+
+			temp2 = temp1->next;
+			temp1->next =temp3;
+			temp3=temp1;
+			temp1=temp2;
 		}
-        
-		return max;
+	
+		head= temp3;
+		
+		printLL();
 	}
 
-	//Driver Code
+    //Driver Code
 
 	void main(){
 
@@ -112,20 +112,15 @@
 			addNode();
 		}
 
-		printLL();
+	    printLL();
+        inplaceReverse();
+           
+       }else{
 		
+			printf("Invalid Node Count!\n");
+
+		}
 	
-
-            int ret = max();
-               
-            printf("%d is maximum in LinkedList \n",ret);
-                  
-               
-      }else{
-		printf("Invalid Node Count!\n");
-
 	}
-	
-}
 
 
